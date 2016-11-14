@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('fs');
 
 const login = require('./login');
@@ -26,15 +28,11 @@ class QQ {
     Login() {
         fs.exists('./cookie.data', isExist => {
             if (isExist) {
-                fs.readFile('./cookie.data', 'utf-8', function (err, data) {
-                    login._Login(data, function () {
-                        poll.startPoll();
-                    });
+                fs.readFile('./cookie.data', 'utf-8', (err, data) => {
+                    login._Login(data, () => poll.startPoll());
                 });
             } else {
-                login.Login(function () {
-                    poll.startPoll();
-                });
+                login.Login(() => poll.startPoll());
             }
         });
     }

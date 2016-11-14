@@ -1,3 +1,5 @@
+'use strict';
+
 const msgcontent = require('./msgcontent');
 const client = require('../libs/httpclient');
 const tuling = require('./tuling');

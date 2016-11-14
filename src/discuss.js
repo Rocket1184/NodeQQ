@@ -1,8 +1,8 @@
+'use strict';
+
 const msgcontent = require('./msgcontent');
 const client = require('../libs/httpclient');
 const tuling = require('./tuling');
-
-const regAtName = new RegExp(`@{global.auth_options.nickname}`);
 
 /**
  * @type {Object}
@@ -32,11 +32,10 @@ function sendMsg(did, msg, callback) {
         })
     };
 
-    client.post({
-        url: 'http://d1.web2.qq.com/channel/send_discu_msg2'
-    }, params, function (ret) {
-        callback && callback(ret);
-    });
+    client.post({ url: 'http://d1.web2.qq.com/channel/send_discu_msg2' },
+        params,
+        (ret) => callback && callback(ret)
+    );
 };
 
 function getAllDiscuss(callback) {
@@ -51,7 +50,7 @@ function getAllDiscuss(callback) {
         }
     };
 
-    client.url_get(options, function (err, res, data) {
+    client.url_get(options, (err, res, data) => {
         let list = JSON.parse(data);
         list.result.dnamelist.forEach(e => {
             allDiscuss.did.set(e.name, e.did);
@@ -79,7 +78,7 @@ function getDiscussInfo(did, callback) {
         }
     }
 
-    client.url_get(options, function (err, res, data) {
+    client.url_get(options, (err, res, data) => {
         console.log(res);
         callback && callback(data);
     });
@@ -93,7 +92,7 @@ function getDiscussInfo(did, callback) {
 function Handle(msg) {
     var isAt = msg.content[1].indexOf('@' + global.auth_options.nickname);
     if (isAt > -1) {
-        var val = msg.content[1].replace(regAtName, '');
+        var val = msg.content[1].replace('@' + global.auth_options.nickname, '');
         tuling.getMsg(val.trim(), str => sendMsg(msg.did, str));
     }
 }

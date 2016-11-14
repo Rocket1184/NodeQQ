@@ -1,3 +1,5 @@
+'use strict';
+
 const async = require('async');
 const Log = require('log');
 const log = new Log('debug');
@@ -9,7 +11,7 @@ const buddy = require('./buddy');
 const discuss = require('./discuss');
 const info = require('./info');
 
-var toPoll = false;
+let toPoll = false;
 
 function onPoll(aaa, cb) {
     let params = {
@@ -23,9 +25,7 @@ function onPoll(aaa, cb) {
     client.post({
         url: "http://d1.web2.qq.com/channel/poll2",
         timeout: 65000
-    }, params, function (ret) {
-        cb(ret);
-    });
+    }, params, ret => cb(ret));
 };
 
 function stopPoll() {
@@ -46,14 +46,12 @@ function onDisconnect() {
     log.info(`Disconnect.`);
     // fixme: 需要重新登录
     stopPoll();
-    login._Login(client.get_cookies_string(), function () {
-        startPoll();
-    });
+    login._Login(client.get_cookies_string(), () => startPoll());
 }
 
 function loopPoll(auth_options) {
     if (!toPoll) return;
-    onPoll(auth_options, function (e) {
+    onPoll(auth_options, (e) => {
         _onPoll(e);
         loopPoll();
     })
@@ -73,11 +71,9 @@ function _onPoll(ret) {
     }
     if (!Array.isArray(ret.result)) return;
 
-    ret.result = ret.result.sort(function (a, b) {
-        return a.value.time - b.value.time
-    });
+    ret.result = ret.result.sort((a, b) => a.value.time - b.value.time);
 
-    async.eachSeries(ret.result, function (item, next) {
+    async.eachSeries(ret.result, (item, next) => {
         _.extend(item, item.value);
         delete item.value;
 

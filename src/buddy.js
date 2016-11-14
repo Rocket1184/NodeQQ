@@ -1,3 +1,5 @@
+'use strict';
+
 const msgcontent = require('./msgcontent');
 const client = require('../libs/httpclient');
 const tuling = require('./tuling');
@@ -47,15 +49,16 @@ function getAllFriends(callback) {
         })
     };
 
-    client.post({
-        url: 'http://s.web2.qq.com/api/get_user_friends2'
-    }, params, function (response) {
-        response.result.info.forEach(e => {
-            allFriends.uin.set(e.nick, e.uin);
-            allFriends.nick.set(e.uin, e.nick);
-        });
-        callback && callback(allFriends);
-    });
+    client.post({ url: 'http://s.web2.qq.com/api/get_user_friends2' },
+        params,
+        response => {
+            response.result.info.forEach(e => {
+                allFriends.uin.set(e.nick, e.uin);
+                allFriends.nick.set(e.uin, e.nick);
+            });
+            callback && callback(allFriends);
+        }
+    );
 }
 
 /**
@@ -104,7 +107,7 @@ function getFriendAccount(uin, callback) {
         }
     };
 
-    client.url_get(options, function (err, res, data) {
+    client.url_get(options, (err, res, data) => {
         if (data.account) {
             allFriends.account.set(uin, data.account);
             callback && callback(data.uin);
@@ -131,11 +134,10 @@ function sendMsg(uin, msg, callback) {
         })
     };
 
-    client.post({
-        url: 'http://d1.web2.qq.com/channel/send_buddy_msg2'
-    }, params, function (response) {
-        callback && callback(response);
-    });
+    client.post({ url: 'http://d1.web2.qq.com/channel/send_buddy_msg2' },
+        params,
+        response => callback && callback(response)
+    );
 };
 
 /**

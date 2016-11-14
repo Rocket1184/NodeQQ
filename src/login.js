@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('fs');
 const Log = require('log');
 const log = new Log('debug');

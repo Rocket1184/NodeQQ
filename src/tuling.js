@@ -1,3 +1,5 @@
+'use strict';
+
 const client = require('../libs/httpclient');
 
 const baseURL = 'http://www.tuling123.com/openapi/api?key='
