@@ -6,9 +6,14 @@ const tuling = require('./tuling');
 
 /**
  * @type {Object}
+ * 
+ * @member {Map} detail
+ * @member {Map} name
+ * @member {Map} uin
  * 储存所有群组信息
  */
 let allGroups = {
+    detail: new Map(),
     name: new Map(),
     uin: new Map()
 }
@@ -72,15 +77,17 @@ function getAllGroups(callback) {
         })
     };
 
-    client.post({
-        url: 'http://s.web2.qq.com/api/get_group_name_list_mask2'
-    }, params, function (response) {
-        response.result.gnamelist.forEach(e => {
-            allGroups.uin.set(e.name, e.gid);
-            allGroups.name.set(e.gid, e.name);
-        });
-        callback && callback(allGroups);
-    });
+    client.post({ url: 'http://s.web2.qq.com/api/get_group_name_list_mask2' },
+        params,
+        response => {
+            if(response.retcode != 0) return getAllGroups(callback);
+            response.result.gnamelist.forEach(e => {
+                allGroups.uin.set(e.name, e.gid);
+                allGroups.name.set(e.gid, e.name);
+            });
+            callback && callback(allGroups);
+        }
+    );
 };
 
 /**
@@ -90,6 +97,9 @@ function getAllGroups(callback) {
  * @param {function} callback
  */
 function getDetail(uin, callback) {
+    if (allGroups.detail.has(uin)) {
+        return callback && callback(allGroups.detail.get(uin));
+    }
     let gid = parseInt(uin);
     let options = {
         method: 'GET',
@@ -103,10 +113,8 @@ function getDetail(uin, callback) {
     };
 
     client.url_get(options, function (err, res, data) {
-        //TODO: 数据储存
-        console.log(typeof data);
-        console.log(data);
-        callback && callback(data);
+        allGroups.detail.set(uin, JSON.parse(data));
+        callback && callback(allGroups.detail.get(uin));
     });
 };
 

@@ -52,6 +52,7 @@ function getAllFriends(callback) {
     client.post({ url: 'http://s.web2.qq.com/api/get_user_friends2' },
         params,
         response => {
+            if (response.retcode != 0) return getAllFriends(callback);
             response.result.info.forEach(e => {
                 allFriends.uin.set(e.nick, e.uin);
                 allFriends.nick.set(e.uin, e.nick);

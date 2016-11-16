@@ -34,6 +34,9 @@ function stopPoll() {
 
 function startPoll() {
     toPoll = true;
+    group.getAll(() => log.info('getAllGroups Finish.'));
+    discuss.getAll(() => log.info('getAllDiscu Finish.'));
+    buddy.getAll(() => log.info('getAllFriends Finish.'));
     log.info('polling...');
     if (!global.auth_options.nickname) {
         info.getSelfInfo(() => loopPoll(global.auth_options))
@@ -83,16 +86,34 @@ function _onPoll(ret) {
 
         async.waterfall([
             next => {
-                console.log(`[New Message]: ${JSON.stringify(item)}`);
                 switch (item.poll_type) {
                     case 'group_message':
-                        group.handle(item);
+                        group.getDetail(item.group_code, detail => {
+                            let gName = detail.result.ginfo.name;
+                            let uName;
+                            for (let user of detail.result.minfo) {
+                                if (user.uin == item.send_uin) uName = user.nick;
+                            }
+                            log.info(`[群消息] ${uName} | ${gName} : ${item.content.slice(1)}`);
+                            group.handle(item);
+                        });
                         break;
                     case 'discu_message':
-                        discuss.handle(item);
+                        discuss.getInfo(item.did, detail => {
+                            let dName = detail.result.info.discu_name;
+                            let uName;
+                            for (let user of detail.result.mem_info) {
+                                if (user.uin == item.send_uin) uName = user.nick;
+                            }
+                            log.info(`[讨论组] ${uName} | ${dName} : ${item.content.slice(1)}`);
+                            group.handle(item);
+                        });
                         break;
                     case 'message':
-                        buddy.handle(item);
+                        buddy.getNick(item.from_uin, nick => {
+                            log.info(`[新消息] ${nick} : ${item.content.slice(1)}`);
+                            buddy.handle(item);
+                        });
                     default:
                         break;
                 }

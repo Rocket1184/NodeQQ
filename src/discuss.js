@@ -7,8 +7,13 @@ const tuling = require('./tuling');
 /**
  * @type {Object}
  * 储存所有讨论组信息
+ * 
+ * @member {Map} detail
+ * @member {Map} name
+ * @member {Map} did
  */
 let allDiscuss = {
+    detail: new Map(),
     name: new Map(),
     did: new Map()
 }
@@ -52,6 +57,7 @@ function getAllDiscuss(callback) {
 
     client.url_get(options, (err, res, data) => {
         let list = JSON.parse(data);
+        if(list.retcode != 0) return getAllDiscuss(callback);
         list.result.dnamelist.forEach(e => {
             allDiscuss.did.set(e.name, e.did);
             allDiscuss.name.set(e.did, e.name);
@@ -67,7 +73,11 @@ function getAllDiscuss(callback) {
  * @param {any} cb
  */
 function getDiscussInfo(did, callback) {
-    var options = {
+    if(allDiscuss.detail.has(did)) {
+        return callback && callback(allDiscuss.detail.get(did));
+    }
+
+    let options = {
         method: 'GET',
         protocol: 'http:',
         host: 'd1.web2.qq.com',
@@ -79,8 +89,8 @@ function getDiscussInfo(did, callback) {
     }
 
     client.url_get(options, (err, res, data) => {
-        console.log(res);
-        callback && callback(data);
+        allDiscuss.detail.set(did, JSON.parse(data));
+        callback && callback(allDiscuss.detail.get(did));
     });
 };
 
