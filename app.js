@@ -5,15 +5,16 @@ const http = require('http');
 
 const QQ = require('./src/QQ');
 const ContentType = require('./libs/contentType');
+const serverPort = process.env.PORT || 8080;
 const regexs = {
     extName: /\.(w+)$/
-}
+};
 
 let qq = new QQ();
 let root = path.resolve('.');
 let server = http.createServer((request, response) => {
-    var pathName = url.parse(request.url).pathname;
-    var filePath = path.join(root, pathName);
+    let pathName = url.parse(request.url).pathname;
+    let filePath = path.join(root, pathName);
     if (request.method === 'GET') {
         // try to find and read local file
         fs.stat(filePath, (err, stats) => {
@@ -33,8 +34,6 @@ let server = http.createServer((request, response) => {
         });
     }
 });
-
-var serverPort = process.env.PORT || 8080;
 
 server.listen(serverPort);
 
