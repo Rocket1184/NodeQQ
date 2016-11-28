@@ -18,7 +18,7 @@ let server = http.createServer((request, response) => {
     if (request.method === 'GET') {
         // try to find and read local file
         fs.stat(filePath, (err, stats) => {
-            // no error occured, read file
+            // no error occurred, read file
             if (!err && stats.isFile()) {
                 let extName;
                 try {

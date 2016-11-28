@@ -6,9 +6,15 @@
   "scripts": {
     "start": "node app.js"
   },
-  "author": "gismanli, rocka<i@rocka.me>",
   "license": "ISC",
-
+  "author": "gismanli (https://github.com/gismanli)",
+  "maintainers": [
+    "rocka <i@rocka.me> (https://github.com/rocket1184)"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gismanli/NodeQQ"
+  },
   "dependencies": {
     "async": "^1.5.2",
     "lodash": "^4.5.1",
