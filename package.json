@@ -8,6 +8,7 @@
   },
   "author": "gismanli, rocka<i@rocka.me>",
   "license": "ISC",
+
   "dependencies": {
     "async": "^1.5.2",
     "lodash": "^4.5.1",

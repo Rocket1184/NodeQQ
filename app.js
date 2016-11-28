@@ -7,7 +7,7 @@ const QQ = require('./src/QQ');
 const ContentType = require('./libs/contentType');
 const serverPort = process.env.PORT || 8080;
 const regexs = {
-    extName: /\.(w+)$/
+    extName: /\.(\w+)$/
 };
 
 let qq = new QQ();
