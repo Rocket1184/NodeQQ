@@ -12,7 +12,7 @@ let allFriends = {
     uin: new Map(),
     nick: new Map(),
     account: new Map()
-}
+};
 
 function hashU(x, K) {
     let N, T, U, V;
@@ -33,7 +33,7 @@ function hashU(x, K) {
         V += N[U[T] & 15]
     }
     return V;
-};
+}
 
 
 /**
@@ -70,7 +70,7 @@ function getAllFriends(callback) {
  * @returns
  */
 function getFriendNick(uin, callback) {
-    let nick = allFriends.nick.get(uin)
+    let nick = allFriends.nick.get(uin);
     if (callback) return callback(nick);
     else return nick;
 }
@@ -83,7 +83,7 @@ function getFriendNick(uin, callback) {
  * @returns
  */
 function getFriendUin(nick, callback) {
-    let uin = allFriends.uin.get(nick)
+    let uin = allFriends.uin.get(nick);
     if (callback) return callback(uin);
     else return uin;
 }
@@ -128,7 +128,7 @@ function sendMsg(uin, msg, callback) {
         r: JSON.stringify({
             to: uin,
             face: 522,
-            content: msgcontent.bulid(msg),
+            content: msgcontent.build(msg),
             clientid: global.clientid,
             msg_id: client.nextMsgId(),
             psessionid: global.auth_options.psessionid
@@ -139,12 +139,12 @@ function sendMsg(uin, msg, callback) {
         params,
         response => callback && callback(response)
     );
-};
+}
 
 /**
  * 使用图灵机器人API处理消息
  * 
- * @param {Object} msg 消息对象/poll返回对象
+ * @param {Object} item 消息对象/poll返回对象
  * @param {any} callback
  */
 function Handle(item, callback) {
@@ -160,4 +160,4 @@ module.exports = {
     getNick: getFriendNick,
     getAccount: getFriendAccount,
     handle: Handle
-}
+};

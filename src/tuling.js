@@ -2,9 +2,9 @@
 
 const client = require('../libs/httpclient');
 
-const baseURL = 'http://www.tuling123.com/openapi/api?key='
+const baseURL = 'http://www.tuling123.com/openapi/api?key=';
 const tulingAPIKey = '873ba8257f7835dfc537090fa4120d14';
-const baseURLTail = '&info='
+const baseURLTail = '&info=';
 const tulingURL = baseURL + tulingAPIKey + baseURLTail;
 
 function get(str, callback) {
@@ -15,4 +15,4 @@ function get(str, callback) {
 
 module.exports = {
     getMsg: get
-}
+};

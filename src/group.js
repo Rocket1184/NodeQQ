@@ -16,7 +16,7 @@ let allGroups = {
     detail: new Map(),
     name: new Map(),
     uin: new Map()
-}
+};
 
 function hashU(x, K) {
     let N, T, U, V;
@@ -37,7 +37,7 @@ function hashU(x, K) {
         V += N[U[T] & 15]
     }
     return V;
-};
+}
 
 /**
  * 向指定uin的群组发送消息
@@ -50,7 +50,7 @@ function sendMsg(uin, msg, cb) {
     let params = {
         r: JSON.stringify({
             group_uin: uin,
-            content: msgcontent.bulid(msg),
+            content: msgcontent.build(msg),
             clientid: global.clientid,
             msg_id: client.nextMsgId(),
             psessionid: global.auth_options.psessionid
@@ -62,7 +62,7 @@ function sendMsg(uin, msg, cb) {
     }, params, function (ret) {
         cb && cb(ret);
     });
-};
+}
 
 /**
  * 获取当前QQ号所有群，名称及临时 gid !pass
@@ -88,7 +88,7 @@ function getAllGroups(callback) {
             callback && callback(allGroups);
         }
     );
-};
+}
 
 /**
  * 根据临时 gid 获取群详细信息 pass!
@@ -96,11 +96,11 @@ function getAllGroups(callback) {
  * @param {any} gid 群组gid
  * @param {function} callback
  */
-function getDetail(uin, callback) {
-    if (allGroups.detail.has(uin)) {
-        return callback && callback(allGroups.detail.get(uin));
+function getDetail(gid, callback) {
+    if (allGroups.detail.has(gid)) {
+        return callback && callback(allGroups.detail.get(gid));
     }
-    let gid = parseInt(uin);
+    let gid = parseInt(gid);
     let options = {
         method: 'GET',
         protocol: 'http:',
@@ -113,10 +113,10 @@ function getDetail(uin, callback) {
     };
 
     client.url_get(options, function (err, res, data) {
-        allGroups.detail.set(uin, JSON.parse(data));
-        callback && callback(allGroups.detail.get(uin));
+        allGroups.detail.set(gid, JSON.parse(data));
+        callback && callback(allGroups.detail.get(gid));
     });
-};
+}
 
 /**
  * 使用图灵机器人API处理消息
@@ -143,7 +143,7 @@ function Handle(msg) {
  * @returns
  */
 function getGroupName(uin, callback) {
-    let name = allGroups.name.get(uin)
+    let name = allGroups.name.get(uin);
     if (callback) return callback(name);
     else return name;
 }
@@ -156,7 +156,7 @@ function getGroupName(uin, callback) {
  * @returns
  */
 function getGroupUin(name, callback) {
-    let uin = allGroups.uin.get(name)
+    let uin = allGroups.uin.get(name);
     if (callback) return callback(uin);
     else return uin;
 }
@@ -167,4 +167,4 @@ module.exports = {
     getDetail: getDetail,
     getName: getGroupName,
     getUin: getGroupUin
-}
+};

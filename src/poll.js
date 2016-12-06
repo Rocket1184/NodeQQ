@@ -26,11 +26,11 @@ function onPoll(aaa, cb) {
         url: "http://d1.web2.qq.com/channel/poll2",
         timeout: 65000
     }, params, ret => cb(ret));
-};
+}
 
 function stopPoll() {
     toPoll = false;
-};
+}
 
 function startPoll() {
     toPoll = true;
@@ -39,11 +39,11 @@ function startPoll() {
     buddy.getAll(() => log.info('getAllFriends Finish.'));
     log.info('polling...');
     if (!global.auth_options.nickname) {
-        info.getSelfInfo(() => loopPoll(global.auth_options))
+        info.getSelfInfo(() => loopPoll(global.auth_options));
     } else {
         loopPoll(global.auth_options);
     }
-};
+}
 
 function onDisconnect() {
     log.info(`Disconnect.`);
@@ -57,8 +57,8 @@ function loopPoll(auth_options) {
     onPoll(auth_options, (e) => {
         _onPoll(e);
         loopPoll();
-    })
-};
+    });
+}
 
 function _onPoll(ret) {
     if (!ret) return;
@@ -122,7 +122,7 @@ function _onPoll(ret) {
         ]);
     });
     return;
-};
+}
 
 module.exports = {
     onPoll: onPoll,
@@ -131,4 +131,4 @@ module.exports = {
     onDisconnect: onDisconnect,
     loopPoll: loopPoll,
     _onPoll: _onPoll
-}
+};

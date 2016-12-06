@@ -16,7 +16,7 @@ let allDiscuss = {
     detail: new Map(),
     name: new Map(),
     did: new Map()
-}
+};
 
 /**
  * 向指定did的讨论组发送消息
@@ -29,7 +29,7 @@ function sendMsg(did, msg, callback) {
     var params = {
         r: JSON.stringify({
             did: did,
-            content: msgcontent.bulid(msg),
+            content: msgcontent.build(msg),
             face: 537,
             clientid: global.clientid,
             msg_id: client.nextMsgId(),
@@ -41,7 +41,7 @@ function sendMsg(did, msg, callback) {
         params,
         (ret) => callback && callback(ret)
     );
-};
+}
 
 function getAllDiscuss(callback) {
     let options = {
@@ -86,13 +86,13 @@ function getDiscussInfo(did, callback) {
             'Referer': 'http://d1.web2.qq.com/proxy.html?v=20151105001&callback=1&id=2',
             'Cookie': client.get_cookies_string()
         }
-    }
+    };
 
     client.url_get(options, (err, res, data) => {
         allDiscuss.detail.set(did, JSON.parse(data));
         callback && callback(allDiscuss.detail.get(did));
     });
-};
+}
 
 /**
  * 用图灵机器人API响应讨论组消息
@@ -115,7 +115,7 @@ function Handle(msg) {
  * @returns
  */
 function getDiscussName(did, callback) {
-    let name = allDiscuss.name.get(did)
+    let name = allDiscuss.name.get(did);
     if (callback) return callback(name);
     else return name;
 }
@@ -128,7 +128,7 @@ function getDiscussName(did, callback) {
  * @returns
  */
 function getDiscussDid(name, callback) {
-    let did = allDiscuss.did.get(name)
+    let did = allDiscuss.did.get(name);
     if (callback) return callback(did);
     else return did;
 }
@@ -139,4 +139,4 @@ module.exports = {
     getAll: getAllDiscuss,
     getName: getDiscussName,
     getDid: getDiscussDid
-}
+};

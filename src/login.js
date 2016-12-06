@@ -29,7 +29,7 @@ function Login(callback) {
     }, function (res) {
         res.setEncoding('binary');
     });
-};
+}
 
 function _Login(cookie, callback) {
     log.info('自动登录...');
@@ -43,7 +43,7 @@ function _Login(cookie, callback) {
             if (ret.retcode === 0) {
                 // 重新获取二维码登录
                 if (!ret.result) {
-                    require('child_process').exec('rm -rf cookie.data')
+                    require('child_process').exec('rm -rf cookie.data');
                     Login();
                     return;
                 }
@@ -56,7 +56,7 @@ function _Login(cookie, callback) {
                     vfwebqq: vfwebqq,
                     uin: ret.result.uin,
                     psessionid: ret.result.psessionid
-                }
+                };
 
                 callback && callback();
             } else {
@@ -79,13 +79,13 @@ function checkVcode(cb) {
     };
 
     client.url_get(options, function (err, res, data) {
-        let ret = data.match(/\'(.*?)\'/g).map(function (i) {
+        let ret = data.match(/'(.*?)'/g).map(function (i) {
             let last = i.length - 2;
             return i.substr(1, last);
         });
         cb(ret);
     });
-};
+}
 
 function waitingScan(callback) {
     log.info("登录 step1: 等待二维码校验结果.");
@@ -103,10 +103,9 @@ function waitingScan(callback) {
             waitingScan(callback);
         } else {
             log.error("二维码扫描登录失败.", ret);
-            return;
         }
     });
-};
+}
 
 function getPtwebqq(url, callback) {
     client.url_get(url, function (err, res, data) {
@@ -114,7 +113,7 @@ function getPtwebqq(url, callback) {
             log.info('获取cookie & ptwebqq成功.');
             ptwebqq = client.get_cookies().filter(function (item) {
                 return item.match(/ptwebqq/);
-            }).pop().replace(/ptwebqq\=(.*?);.*/, '$1');
+            }).pop().replace(/ptwebqq=(.*?);.*/, '$1');
 
             getVfwebqq(ptwebqq, function (ret) {
                 if (ret.retcode === 0) {
@@ -146,7 +145,7 @@ function getPtwebqq(url, callback) {
             });
         }
     });
-};
+}
 
 function getVfwebqq(ptwebqq, cb) {
     log.info('登录 step3: 获取vfwebqq');
@@ -203,7 +202,7 @@ function loginToken(ptwebqq, psessionid, cb) {
         }
         cb(ret);
     });
-};
+}
 
 module.exports = {
     Login: Login,
@@ -211,4 +210,4 @@ module.exports = {
     getPtwebqq: getPtwebqq,
     getVfwebqq: getVfwebqq,
     loginToken: loginToken
-}
+};

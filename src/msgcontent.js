@@ -17,5 +17,5 @@ function build(msg, emojiStat) {
 }
 
 module.exports = {
-    bulid: build
-}
+    build: build
+};

@@ -12,7 +12,7 @@ global.font = {
     'size': 10,
     'style': [0, 0, 0],
     'color': '000000'
-}
+};
 
 class QQ {
     constructor() {
